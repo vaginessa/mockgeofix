@@ -9,6 +9,7 @@ import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.location.LocationManager;
+import android.os.Build;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
@@ -109,12 +110,14 @@ public class MainActivity extends ActionBarActivity implements SharedPreferences
         registerReceiver(receiver, new IntentFilter(MockLocationService.ERROR));
 
         // show a dialog when "allow mock location" is not enabled
-        if (Settings.Secure.getString(getApplicationContext().getContentResolver(),
-                Settings.Secure.ALLOW_MOCK_LOCATION).equals("0")) {
-            if ( ! ((MockGeoFixApp)getApplication()).enableMockLocationDialogShown ) {
-                ((MockGeoFixApp)getApplication()).enableMockLocationDialogShown = true;
-                (new EnableMockLocationDialogFragment()).show(getSupportFragmentManager(),
-                        "enable_mock_location_dialog");
+        if (Build.VERSION.SDK_INT < 23) {
+            if (Settings.Secure.getString(getApplicationContext().getContentResolver(),
+                    Settings.Secure.ALLOW_MOCK_LOCATION).equals("0")) {
+                if (!((MockGeoFixApp) getApplication()).enableMockLocationDialogShown) {
+                    ((MockGeoFixApp) getApplication()).enableMockLocationDialogShown = true;
+                    (new EnableMockLocationDialogFragment()).show(getSupportFragmentManager(),
+                            "enable_mock_location_dialog");
+                }
             }
         }
 
