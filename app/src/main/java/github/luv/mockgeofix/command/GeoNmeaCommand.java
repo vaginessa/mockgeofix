@@ -40,8 +40,8 @@ public class GeoNmeaCommand implements Command {
         try {
             type = nmeaFields[0];
         } catch (IndexOutOfBoundsException ex) {
-            // ok because that's what the emulator does as well
-            ResponseWriter.ok(client);
+            // Emulator sends OK, so we are breaking strict compatibility here, but that's fine
+            ResponseWriter.writeLine(client, "KO: NMEA sentence invalid");
             return;
         }
 
@@ -50,8 +50,9 @@ public class GeoNmeaCommand implements Command {
         } else if (type.equals("$GPGGA")) {
             processGPGGA(client, nmeaFields, command);
         } else {
-            // ok because that's what the emulator does as well
-            ResponseWriter.ok(client);
+            // Emulator sends OK, so we are breaking strict compatibility here, but that's fine
+            ResponseWriter.writeLine(client,
+                    "KO: Invalid NMEA command - only $GPRMC and $GPGGA supported");
         }
     }
 
@@ -84,20 +85,20 @@ public class GeoNmeaCommand implements Command {
             strTrackAngle = nmeaFields[8];
             strDate = nmeaFields[9];
         } catch (IndexOutOfBoundsException ex) {
-            // ok because that's what the emulator does as well
-            Log.i(TAG, "Ignoring Nmea sentence: too few fields: "+command);
-            ResponseWriter.ok(client);
+            // Emulator sends OK, so we are breaking strict compatibility here, but that's fine
+            Log.i(TAG, "Ignoring Nmea sentence: too few fields: " + command);
+            ResponseWriter.writeLine(client, "KO: Ignoring Nmea sentence: too few fields");
             return;
         }
 
         if (!checkChecksum(command)) {
-            ResponseWriter.ok(client);
+            ResponseWriter.writeLine(client, "KO: Ignoring Nmea sentence: invalid checksum");
             Log.i(TAG, "Ignoring Nmea sentence: invalid checksum: "+command);
             return;
         }
 
         if (strStatus.toLowerCase().equals("v")) {
-            ResponseWriter.ok(client);
+            ResponseWriter.writeLine(client, "KO: Ignoring Nmea sentence: Status is 'V' (void)");
             Log.i(TAG, "Ignoring Nmea sentence: Status is 'V' (void): "+command);
             return;
         }
@@ -110,8 +111,8 @@ public class GeoNmeaCommand implements Command {
         try {
             timestamp = convertTimeAndDate(strTime, strDate);
         } catch(ParseException ex) {
-            ResponseWriter.ok(client);
-            Log.i(TAG, "Ignoring Nmea sentence: Can't parse date or time: "+command);
+            ResponseWriter.writeLine(client, "KO: Ignoring Nmea sentence: Can't parse date or time");
+            Log.i(TAG, "Ignoring Nmea sentence: Can't parse date or time: " + command);
             return;
         }
 
@@ -119,7 +120,7 @@ public class GeoNmeaCommand implements Command {
             latitude = convertLatitude(strLatitude, strLatitudeQual);
             longitude = convertLongitude(strLongitude, strLongitudeQual);
         } catch(NumberFormatException ex) {
-            ResponseWriter.ok(client);
+            ResponseWriter.writeLine(client, "KO: Ignoring Nmea sentence: Can't parse latitude or longitude");
             Log.i(TAG, "Ignoring Nmea sentence: Can't parse latitude or longitude: "+command);
             return;
         }
@@ -127,7 +128,7 @@ public class GeoNmeaCommand implements Command {
         try {
             speed = Float.valueOf(strSpeed) * (float)0.51444;
         } catch(NumberFormatException ex) {
-            ResponseWriter.ok(client);
+            ResponseWriter.writeLine(client, "KO: Ignoring Nmea sentence: Can't parse speed");
             Log.i(TAG, "Ignoring Nmea sentence: Can't parse speed: "+command);
             return;
         }
@@ -136,8 +137,8 @@ public class GeoNmeaCommand implements Command {
             // this might be completely wrong
             bearing = Float.valueOf(strTrackAngle);
         } catch(NumberFormatException ex) {
-            ResponseWriter.ok(client);
-            Log.i(TAG, "Ignoring Nmea sentence: Can't parse track angle: "+command);
+            ResponseWriter.writeLine(client, "KO: Ignoring Nmea sentence: Can't parse track angle");
+            Log.i(TAG, "Ignoring Nmea sentence: Can't parse track angle: " + command);
             return;
         }
 
@@ -186,20 +187,19 @@ public class GeoNmeaCommand implements Command {
             strAltitude = nmeaFields[9];
             strAltitudeUnits = nmeaFields[10];
         } catch (IndexOutOfBoundsException ex) {
-            // ok because that's what the emulator does as well
-            Log.i(TAG, "Ignoring Nmea sentence: too few fields: "+command);
-            ResponseWriter.ok(client);
+            Log.i(TAG, "Ignoring Nmea sentence: too few fields: " + command);
+            ResponseWriter.writeLine(client, "KO: Ignoring Nmea sentence: too few fields");
             return;
         }
 
         if (!checkChecksum(command)) {
-            ResponseWriter.ok(client);
+            ResponseWriter.writeLine(client, "KO: Ignoring Nmea sentence: invalid checksum");
             Log.i(TAG, "Ignoring Nmea sentence: invalid checksum: "+command);
             return;
         }
 
         if (strQuality.equals("0")) {
-            ResponseWriter.ok(client);
+            ResponseWriter.writeLine(client, "KO: Ignoring Nmea sentence: FixQuality is '0' (invalid)");
             Log.i(TAG, "Ignoring Nmea sentence: FixQuality is '0' (invalid): "+command);
             return;
         }
@@ -212,8 +212,8 @@ public class GeoNmeaCommand implements Command {
         try {
             timestamp = convertTimeAndDate(strTime, null);
         } catch(ParseException ex) {
-            ResponseWriter.ok(client);
-            Log.i(TAG, "Ignoring Nmea sentence: Can't parse date or time: "+command);
+            ResponseWriter.writeLine(client, "KO: Ignoring Nmea sentence: Can't parse date or time");
+            Log.i(TAG, "Ignoring Nmea sentence: Can't parse date or time: " + command);
             return;
         }
 
@@ -221,7 +221,7 @@ public class GeoNmeaCommand implements Command {
             latitude = convertLatitude(strLatitude, strLatitudeQual);
             longitude = convertLongitude(strLongitude, strLongitudeQual);
         } catch(NumberFormatException ex) {
-            ResponseWriter.ok(client);
+            ResponseWriter.writeLine(client, "KO: Ignoring Nmea sentence: Can't parse latitude or longitude");
             Log.i(TAG, "Ignoring Nmea sentence: Can't parse latitude or longitude: "+command);
             return;
         }
@@ -229,7 +229,7 @@ public class GeoNmeaCommand implements Command {
         try {
             satellites = Integer.valueOf(strSatellites);
         } catch(NumberFormatException ex) {
-            ResponseWriter.ok(client);
+            ResponseWriter.writeLine(client, "KO: Ignoring Nmea sentence: Can't parse satellites");
             Log.i(TAG, "Ignoring Nmea sentence: Can't parse satellites: "+command);
             return;
         }
@@ -237,7 +237,7 @@ public class GeoNmeaCommand implements Command {
         try {
             altitude = convertAltitude(strAltitude, strAltitudeUnits);
         } catch(NumberFormatException ex) {
-            ResponseWriter.ok(client);
+            ResponseWriter.writeLine(client, "KO: Ignoring Nmea sentence: Can't parse altitude");
             Log.i(TAG, "Ignoring Nmea sentence: Can't parse altitude: "+command);
             return;
         }
