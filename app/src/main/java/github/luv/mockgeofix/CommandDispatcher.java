@@ -44,7 +44,7 @@ public class CommandDispatcher {
 
     protected void _dispatch(SocketChannel client, String command) {
         String cmd = command.split(" ", 2)[0].toLowerCase();
-        if (cmd.equals("password")) {
+        if (cmd.equals("password") || cmd.equals("auth")) {
             passwordCommand.execute(client, command);
         } else if (cmd.equals("geo")) {
             if ( passwordCommand.passwordRequired() && (! passwordCommand.loggedIn(client)) ) {

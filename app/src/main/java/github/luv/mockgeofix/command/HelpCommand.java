@@ -20,9 +20,10 @@ public class HelpCommand implements Command {
             helpText.append("    help         print a list of commands\r\n");
             helpText.append("    geo          Geo-location commands\r\n");
             helpText.append("    password     login using your password\r\n");
+            helpText.append("    auth         (alias for password)\r\n");
             helpText.append("    quit|exit    quit control session\r\n");
             helpText.append("\r\ntry 'help <command>' for command-specific help\r\n");
-        } else if (param.equals("password")) {
+        } else if (param.equals("password") || param.equals("auth")) {
             helpText.append("login using your password (set in MockGeoFix Settings screen)\r\n");
         } else if (param.equals("help")) {
             helpText.append("print a list of commands\r\n");
