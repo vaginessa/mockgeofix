@@ -12,7 +12,7 @@ install this APK on your phone (requires allowed "Unknown sources").
 basic usage
 -----------
 
-Start the application, click "start" and telnet to the IP address of your android device on the specified port (default 5554) and you can mock location exactly the same as with the android emulator:
+Start the application, click "start" and telnet to the IP address of your android device on the specified port (default 5554) and you can mock locations exactly the same as with the android emulator:
 
 <pre>
 $ <b>telnet my_phone_ip 5554</b>
@@ -74,7 +74,7 @@ and then simply
 
 `telnet 127.0.0.1 5556`
 
-This can then be combined with tcpflow and socat to forward "geo commands"
+this can then be combined with tcpflow and socat to forward "geo commands"
 
 `tcpflow -B -C -i lo dst port 5554 | socat - TCP4:127.0.0.1:5556`
 
