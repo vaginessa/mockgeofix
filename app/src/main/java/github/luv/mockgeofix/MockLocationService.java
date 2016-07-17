@@ -1,5 +1,7 @@
 package github.luv.mockgeofix;
 
+import android.app.Notification;
+import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
@@ -84,7 +86,13 @@ public class MockLocationService extends Service {
     }
 
     public void stop() {
-        if (mThread == null) { return; }
+        // it's apparently ok to call stopForeground even when startForeground has not been called
+        // tested on Gingerbread as well as Android N
+        stopForeground(true);
+
+        if (mThread == null) {
+            return;
+        }
         mThread.kill();
         mThread.interrupt();
     }
@@ -98,6 +106,18 @@ public class MockLocationService extends Service {
     }
 
     protected void threadHasStartedSuccessfully() {
+        if (pref.getBoolean("foreground_service", false)) {
+            String portStr = pref.getString("listen_port", "5554");
+            // deprecated but only API that works on everything from Gingerbread to Android N
+            Notification notification = new Notification(R.drawable.ic_notification, "MockGeoFix service started",
+                    System.currentTimeMillis());
+            Intent notificationIntent = new Intent(getApplicationContext(), MainActivity.class);
+            PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(), 0, notificationIntent, 0);
+            notification.setLatestEventInfo(getApplicationContext(), "MockGeoFix on port "+portStr,
+                    "Touch to open MockGeoFix.", pendingIntent);
+            startForeground(MockGeoFixApp.SERVICE_NOTIFICATION_ID, notification);
+        }
+
         broadcast(STARTED);
     }
 

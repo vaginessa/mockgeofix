@@ -63,6 +63,7 @@ public class SettingsActivity extends PreferenceActivity
         bindPreference(findPreference("accuracy"));
         bindPreference(findPreference("password"));
         bindPreference(findPreference("require_password"));
+        bindPreference(findPreference("foreground_service"));
         mInitialBinding = false;
     }
 
@@ -180,7 +181,8 @@ public class SettingsActivity extends PreferenceActivity
         }
 
         /* Warn the user that the change won't take effect until the service is restarted */
-        if (pref.getKey().equals("listen_port") || pref.getKey().equals("listen_ip")) {
+        if (pref.getKey().equals("listen_port") || pref.getKey().equals("listen_ip") ||
+                pref.getKey().equals("foreground_service")) {
             if ( ! mInitialBinding && (mService != null && mService.isRunning()) ) {
                 Toast.makeText(getApplicationContext(), getString(R.string.note_needsreset),
                         Toast.LENGTH_LONG).show();
