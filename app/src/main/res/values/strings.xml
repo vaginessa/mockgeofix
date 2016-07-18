@@ -42,9 +42,6 @@
         \n\nPassword is provided using the following telnet command:
         \nPASSWORD &lt;password&gt;
         \nExample: PASSWORD blue-taco</b></string>
-    <string name="pref_foreground_service">Run as a foreground service</string>
-    <string name="pref_foreground_service_summary"><b>This should ensure the service is not killed
-        by Android low memory killer</b></string>
 
 
 
