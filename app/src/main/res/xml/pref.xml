@@ -22,6 +22,13 @@
         android:inputType="number"
         />
 
+    <CheckBoxPreference
+        android:key="foreground_service"
+        android:title="@string/pref_foreground_service"
+        android:defaultValue="false"
+        android:summary="@string/pref_foreground_service_summary"
+    />
+
     <PreferenceCategory
         android:title="@string/pref_header_security"
         android:key="pref_cat_security">

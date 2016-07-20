@@ -7,7 +7,9 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.content.SharedPreferences;
 import android.os.IBinder;
+import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 
 /**
@@ -56,13 +58,20 @@ public class ForegroundService extends Service {
     }
 
     public void goForeground() {
+        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(
+                getApplicationContext());
+        String portStr = pref.getString("listen_port", "5554");
+
         // deprecated but only API that works on everything from Gingerbread to Android N
-        Notification notification = new Notification(R.drawable.ic_notification, "MockGeoFix service started",
+        Notification notification = new Notification(R.drawable.ic_notification,
+                getString(R.string.notification_ticker),
                 System.currentTimeMillis());
         Intent notificationIntent = new Intent(getApplicationContext(), MainActivity.class);
         PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(), 0, notificationIntent, 0);
-        notification.setLatestEventInfo(getApplicationContext(), "MockGeoFix",
-                "Touch to open MockGeoFix.", pendingIntent);
+        notification.setLatestEventInfo(getApplicationContext(),
+                String.format(getString(R.string.notification_title), portStr),
+                getString(R.string.notification_text),
+                pendingIntent);
         startForeground(MockGeoFixApp.FOREGROUND_SERVICE_NOTIFICATION_ID, notification);
     }
 

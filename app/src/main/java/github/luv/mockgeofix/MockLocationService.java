@@ -119,8 +119,10 @@ public class MockLocationService extends Service {
     }
 
     protected void threadHasStartedSuccessfully() {
-        Intent i = new Intent(getApplicationContext(), ForegroundService.class);
-        startService(i);
+        if (pref.getBoolean("foreground_service", false)) {
+            Intent i = new Intent(getApplicationContext(), ForegroundService.class);
+            startService(i);
+        }
         broadcast(STARTED);
     }
 
