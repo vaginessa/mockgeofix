@@ -34,6 +34,16 @@ import java.util.concurrent.CountDownLatch;
 
 import github.luv.mockgeofix.util.ResponseWriter;
 
+/**
+ * MockLocationService starts at the app startup and runs as long as the application process
+ * is running (never call stopService on this service). This service does *not* correspond to
+ * the worker thread (MockLocationThread), this is a management service that is used to start/stop
+ * the worker thread.
+ *
+ * In addition to starting/stopping the worker thread on demand, MockLocationService also
+ * broadcasts when the thread has been started/stopped or an error occurred, it also starts/stops
+ * the ForegroundService.
+ */
 public class MockLocationService extends Service {
     String TAG = "MockLocationService";
 
@@ -66,7 +76,16 @@ public class MockLocationService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        return START_STICKY;
+        // In Android docs it says "START_NOT_STICKY" means that the service won't be restarted when
+        // killed by OOM/low-memory killer, but the OOM/low-memory killer does not just stops the
+        // service but kills the whole process (ie kills MockGeoFix app). When the documentation talks
+        // about restarting the service it effectively means restarting the process in which the
+        // service runs.
+        //
+        // This is a management service that has to run only as long as MockGeoFix app is running so
+        // we don't require (or want) the oom-killer to restart MockGeoFix app only because this
+        // service was running when it was killed
+        return START_NOT_STICKY;
     }
 
     @Override
