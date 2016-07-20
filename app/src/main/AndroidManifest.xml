@@ -35,6 +35,12 @@
             android:enabled="true"
             android:exported="false" >
         </service>
+
+        <service
+            android:name="github.luv.mockgeofix.ForegroundService"
+            android:enabled="true"
+            android:exported="false" >
+        </service>
     </application>
 
 </manifest>

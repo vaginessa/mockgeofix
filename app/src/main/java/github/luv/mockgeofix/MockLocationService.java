@@ -30,6 +30,7 @@ import java.nio.channels.SocketChannel;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Vector;
+import java.util.concurrent.CountDownLatch;
 
 import github.luv.mockgeofix.util.ResponseWriter;
 
@@ -38,6 +39,8 @@ public class MockLocationService extends Service {
 
     protected MockLocationThread mThread = null;
     protected SharedPreferences pref = null;
+    public static MockLocationService self = null;
+    public static CountDownLatch selfInitialized = new CountDownLatch(1);
 
     public final static String STARTED = "STARTED";
     public final static String STOPPED = "STOPPED";
@@ -57,6 +60,8 @@ public class MockLocationService extends Service {
         super.onCreate();
         pref = PreferenceManager.getDefaultSharedPreferences(
                 getApplicationContext());
+        self = this;
+        selfInitialized.countDown();
     }
 
     @Override
@@ -94,10 +99,14 @@ public class MockLocationService extends Service {
        to communicate its' state */
     protected void threadHasStopped() {
         mThread = null;
+        Intent i = new Intent(getApplicationContext(), ForegroundService.class);
+        stopService(i);
         broadcast(STOPPED);
     }
 
     protected void threadHasStartedSuccessfully() {
+        Intent i = new Intent(getApplicationContext(), ForegroundService.class);
+        startService(i);
         broadcast(STARTED);
     }
 
