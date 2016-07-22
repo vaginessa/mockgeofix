@@ -29,7 +29,7 @@ public class OomAdjOverrider {
     // executed successfully.
     // EPIPE on Xth run could happen when someone kills our 'su' process in that very short window
     // ... we just log it, ignore it and set oom_adj on the next run,
-    // EPIPE fail on first means the 'su' did not open a shell (but probably exitted with an error
+    // EPIPE fail on first run means the 'su' did not open a shell (but probably exited with an error
     // message)
     public boolean runSuccessfully = false;
 
@@ -161,8 +161,8 @@ public class OomAdjOverrider {
     }
 
     /**
-     * This method is triggered when an error occurs happens when executing su
-     * (eg permission denied, su not found, "EPIPE" (su did not open shell)
+     * This method is triggered when an error occurs when executing su
+     * (eg permission denied, su not found, "EPIPE" (su did not open shell))
      *
      * WARNING: this method is executed in the thread that executed su.
      * So be careful, for example, if you want to do something with UI from this method
