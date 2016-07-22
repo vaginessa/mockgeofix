@@ -204,8 +204,8 @@ public class OomAdjOverrider {
 
                 // exit code != 0 ... something went wrong
                 if (process.exitValue() != 0) {
-                    throw new RunException(String.format("su finished with non-zero exit code: %d",
-                            process.exitValue()));
+                    throw new RunException(String.format("su finished with non-zero exit code: %d."+
+                            " Do you have root?", process.exitValue()));
                 }
             } finally {
                 // make sure our our stream is closed and the process is destroyed
