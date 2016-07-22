@@ -43,7 +43,11 @@
 
     <string name="pref_foreground_service">Run as a foreground service</string>
     <string name="pref_foreground_service_summary"><b>Shows a notification when the service is running
-        and hints Android low memory killer to restart the service when possible.</b></string>
+        and hints OOM/low-memory killer to restart the service when possible.</b></string>
+
+    <string name="pref_oom_adj">Override OOM killer priority</string>
+    <string name="pref_oom_adj_summary"><b>REQUIRES ROOT! Overrides /proc/PID/oom_adj as necessary to prevent OOM/low-memory killer
+        from killing MockGeoFix.</b></string>
 
     <!-- main activity -->
     <string name="status">status: </string>

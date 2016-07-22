@@ -11,6 +11,7 @@ public class MockGeoFixApp extends Application {
     public boolean openLocationSourceSettingsDialogShown = false;
     @Override
     public void onCreate() {
+        super.onCreate();
         PreferenceManager.setDefaultValues(this, R.xml.pref, false);
         CommandDispatcher.init(getApplicationContext());
         MockLocationProvider.init(getApplicationContext());
