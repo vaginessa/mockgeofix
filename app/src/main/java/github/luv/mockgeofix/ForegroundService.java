@@ -18,13 +18,14 @@ import android.support.annotation.Nullable;
  * the user ticked "foreground service" in preferences).
  *
  * This service is also started by Android on app startup when (and only when) the app was
- * previously killed by OOM/low-memory and the service was running at that time - that's why we call
- * MockLocationService.self.start() in onStartCommand (to start the worker thread if it was running
- * at the time MockGeoFix was killed by oom killer).
+ * previously killed by OOM/low-memory killer and the service was running at that time - that's why
+ * we call MockLocationService.start() in onStartCommand (to start the worker thread if it
+ * was running at the time MockGeoFix was killed by oom killer).
  *
  * Running this service has following consequences:
  *   * provides a system notification when the worker thread is running
  *   * lower oom_adj value (less likely to be killed by OOM/low-memory killer)
+ *   * hints OOM/low-memory killer to restart MockGeoFix when resources are available again
  *   * automatically restarts the worker thread on app startup when (and only when) the thread
  *     was running when the app was killed by OOM/low-memory killer
  */

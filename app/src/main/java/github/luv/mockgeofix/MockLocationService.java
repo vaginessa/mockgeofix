@@ -48,13 +48,7 @@ public class MockLocationService extends Service {
 
     protected MockLocationThread mThread = null;
     protected SharedPreferences pref = null;
-    protected OomAdjOverrider oomAdjOverrider = new OomAdjOverrider(-13) {
-        @Override
-        public synchronized void errorHandler(RunException ex) {
-            errorHasOccurred(ex.getMessage());
-            phoneNotRooted = true;
-        }
-    };
+    protected OomAdjOverrider oomAdjOverrider = null;
 
     public final static String STARTED = "STARTED";
     public final static String STOPPED = "STOPPED";
@@ -124,7 +118,9 @@ public class MockLocationService extends Service {
         // it's fine to call stopService on a service that is not running
         stopService(i);
         // if monitoring is already stopped, this call has no effect.
-        oomAdjOverrider.stop();
+        if (oomAdjOverrider != null) {
+            oomAdjOverrider.stop();
+        }
         broadcast(STOPPED);
     }
 
@@ -134,12 +130,16 @@ public class MockLocationService extends Service {
             startService(i);
         }
         if (pref.getBoolean("oom_adj",false)) {
-            // phoneNotRoote = false because we want to try again - someone might have changed
-            // "Root Access" settings in cyanogenmod su for example
-            // If not, the user sees an error message - but this code is run only when the user
-            // explicitly selected "Override OOM priority (requires root)" in the settings so
-            // that's fair play
-            oomAdjOverrider.phoneNotRooted = false;
+            // creating new OomAdjOverrider instance everytime the worker has started
+            // means phoneNotRooted attribute is reset - but that's what we want - someone might
+            // have changed "Root Access" setting in cyanogenmod for example
+            oomAdjOverrider = new OomAdjOverrider(-13) {
+                @Override
+                public synchronized void suErrorHandler(RunException ex) {
+                    errorHasOccurred(ex.getMessage());
+                    phoneNotRooted = true;
+                }
+            };
             oomAdjOverrider.start();
         }
         broadcast(STARTED);

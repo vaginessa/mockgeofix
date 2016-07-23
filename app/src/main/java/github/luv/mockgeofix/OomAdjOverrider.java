@@ -22,14 +22,14 @@ public class OomAdjOverrider {
 
     // when we detect it's not possible to write to oom_adj we set this to true
     // and stop bothering trying to write to oom_adj again. it's ok for the user of this
-    // class to reset to true and call .start() again when the problem might have been recovered
+    // class to reset to false and call .start() again when the problem might have been recovered
     public boolean phoneNotRooted = false;
 
-    // it's ok to skip some errors (eg EPIPE) if they happen on a Xth run, but 'su' has already
+    // it's ok to skip some errors (eg EPIPE) if they happen on a Xth run if 'su' has already
     // executed successfully.
     // EPIPE on Xth run could happen when someone kills our 'su' process in that very short window
     // ... we just log it, ignore it and set oom_adj on the next run,
-    // EPIPE fail on first run means the 'su' did not open a shell (but probably exited with an error
+    // EPIPE fail on the first run means 'su' did not open a shell (but probably exited with an error
     // message)
     public boolean runSuccessfully = false;
 
@@ -115,7 +115,7 @@ public class OomAdjOverrider {
             // oom_adj is obsolete
             run(String.format("echo %d > /proc/%d/oom_adj", oomValue, pid));
         } catch (RunException e) {
-            errorHandler(e);
+            suErrorHandler(e);
         }
         for (FileObserver o : observers) {
             o.startWatching();
@@ -168,7 +168,7 @@ public class OomAdjOverrider {
      * So be careful, for example, if you want to do something with UI from this method
      * (eg Toast) use activity.runOnUiThread
      */
-    synchronized public void errorHandler(RunException ex) {
+    synchronized public void suErrorHandler(RunException ex) {
         Log.e(TAG, ex.toString());
         phoneNotRooted = true;
     }
@@ -208,7 +208,7 @@ public class OomAdjOverrider {
                             " Do you have root?", process.exitValue()));
                 }
             } finally {
-                // make sure our our stream is closed and the process is destroyed
+                // make sure our stream is closed and the process is destroyed
                 try { STDIN.close(); }
                 catch (IOException e) { /* might be closed already */ }
                 process.destroy();
