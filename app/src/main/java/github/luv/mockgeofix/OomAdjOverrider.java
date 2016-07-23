@@ -44,24 +44,6 @@ public class OomAdjOverrider {
      */
     public OomAdjOverrider(int oomValue) {
         this.oomValue = oomValue;
-        observers.add(new FileObserver(String.format("/proc/%d/oom_adj", pid)) {
-            @Override
-            public void onEvent(int i, String s) {
-                OomAdjOverrider.this.onEvent(i, s);
-            }
-        });
-        observers.add(new FileObserver(String.format("/proc/%d/oom_score", pid)) {
-            @Override
-            public void onEvent(int i, String s) {
-                OomAdjOverrider.this.onEvent(i, s);
-            }
-        });
-        observers.add(new FileObserver(String.format("/proc/%d/oom_score_adj", pid)) {
-            @Override
-            public void onEvent(int i, String s) {
-                OomAdjOverrider.this.onEvent(i, s);
-            }
-        });
     }
 
     private void onEvent(int i, String s) {
@@ -125,6 +107,25 @@ public class OomAdjOverrider {
     /* write oomValue to oom_adj and
      * start observing oom_adj and write our oomValue back to the file every time it is changed */
     public void start() {
+        stop();
+        observers.add(new FileObserver(String.format("/proc/%d/oom_adj", pid)) {
+            @Override
+            public void onEvent(int i, String s) {
+                OomAdjOverrider.this.onEvent(i, s);
+            }
+        });
+        observers.add(new FileObserver(String.format("/proc/%d/oom_score", pid)) {
+            @Override
+            public void onEvent(int i, String s) {
+                OomAdjOverrider.this.onEvent(i, s);
+            }
+        });
+        observers.add(new FileObserver(String.format("/proc/%d/oom_score_adj", pid)) {
+            @Override
+            public void onEvent(int i, String s) {
+                OomAdjOverrider.this.onEvent(i, s);
+            }
+        });
         for (FileObserver o : observers) {
             o.startWatching();
         }
@@ -158,6 +159,7 @@ public class OomAdjOverrider {
         for (FileObserver o : observers) {
             o.stopWatching();
         }
+        observers.clear();
     }
 
     /**

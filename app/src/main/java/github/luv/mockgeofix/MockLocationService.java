@@ -120,6 +120,7 @@ public class MockLocationService extends Service {
         // if monitoring is already stopped, this call has no effect.
         if (oomAdjOverrider != null) {
             oomAdjOverrider.stop();
+            oomAdjOverrider = null;
         }
         broadcast(STOPPED);
     }
