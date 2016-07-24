@@ -60,6 +60,10 @@ field in gpsvisualizer converter). Alternatively, simply export GPX from http://
 extra tricks
 -------------
 
+### where to get APKs
+
+If you can't/don't want to install MockGeoFix from Google Play, you can download APKs directly from the [Releases](https://github.com/luv/mockgeofix/releases) page.
+
 ### forwarding geo commands sent to the emulator to a real device
 
 `tcpflow -B -C -i lo dst port 5554 | socat - TCP4:my_phone_ip:5554`
