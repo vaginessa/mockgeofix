@@ -29,7 +29,7 @@ A bit too detailed guide on how to run MockGeoFix on Android from Gingerbread to
   <img src="https://raw.githubusercontent.com/luv/mockgeofix/master/docs/android5_howto/6-telnet.png" height="400" alt="telnet" />
 
 7. Bonus step: verify in Google Maps
-  - Open Google Mapps and if prompted whether to improve accuracy by also using Wi-Fi for geolocation, even though it seems counter-intuitive say yes. Then go back to *Settings->Personal->Location* and change *Mode* to *Device Only*. (At least, when testing MockGeoFix on CyanogenMod12 I had to follow this strange procedure to get location mocking working in Google Mapps, YMMV.)
+  - Open Google Maps and if prompted whether to improve accuracy by also using Wi-Fi for geolocation, even though it seems counter-intuitive say yes. Then go back to *Settings->Personal->Location* and change *Mode* to *Device Only*. (At least, when testing MockGeoFix on CyanogenMod12 I had to follow this strange procedure to get location mocking working in Google Mapps, YMMV.)
   
   <img src="https://raw.githubusercontent.com/luv/mockgeofix/master/docs/android5_howto/7-google%20maps.png" height="400" alt="google maps" />
   - click on the "locate me" button and here we go! (if nothing happens re-enter the geo fix command in the telnet session and try again)
