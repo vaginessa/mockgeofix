@@ -82,5 +82,8 @@ this can then be combined with tcpflow and socat to forward "geo commands"
 
 `tcpflow -B -C -i lo dst port 5554 | socat - TCP4:127.0.0.1:5556`
 
+step-by-step guides
+-------------------
+* [Running MockGeoFix on Android <=5.1](https://github.com/luv/mockgeofix/blob/master/docs/android5_howto/README.md)
 
 
