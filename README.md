@@ -85,5 +85,6 @@ this can then be combined with tcpflow and socat to forward "geo commands"
 step-by-step guides
 -------------------
 * [Running MockGeoFix on Android <=5.1](https://github.com/luv/mockgeofix/blob/master/docs/android5_howto/README.md)
+* [Running MockGeoFix on Android >=6.0](https://github.com/luv/mockgeofix/blob/master/docs/android6_howto/README.md)
 
 
