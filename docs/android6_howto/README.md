@@ -8,23 +8,23 @@ A bit too detailed guide on how to run MockGeoFix on Android Marshmallow and new
   - go to *Settings->About phone* and click on *Build number* 5 times
   
   <img src="https://raw.githubusercontent.com/luv/mockgeofix/master/docs/android6_howto/1-enable%20developer%20options.png" height="400" alt="enable developer options" />
-3. Select MockGeoFix as a mock location app *Allow mock locations* in *Settings->Developer opions*
+3. Select MockGeoFix as a mock location app
   - open *Settings->Developer opions*
   
   <img src="https://raw.githubusercontent.com/luv/mockgeofix/master/docs/android6_howto/2-developer%20options.png" height="400" alt="developer options" />
   - Click on *Select mock location app*
   
   <img src="https://raw.githubusercontent.com/luv/mockgeofix/master/docs/android6_howto/3-allow%20mock%20locations.png" height="400" alt="allow mock locations" />
-  
   - And select MockGeoFix
+
   <img src="https://raw.githubusercontent.com/luv/mockgeofix/master/docs/android6_howto/3-allow%20mock%20locations-2.png" height="400" alt="allow mock locations" />
 
 4. Change location strategy to "device only"
   - open *Settings->Personal->Location* and click on *Mode*
   
   <img src="https://raw.githubusercontent.com/luv/mockgeofix/master/docs/android6_howto/4-location%20device%20only.png" height="400" alt="location device only" />
-
   - and select *Device only*
+
   <img src="https://raw.githubusercontent.com/luv/mockgeofix/master/docs/android6_howto/4-location%20device%20only-2.png" height="400" alt="location device only" />
 
 5. Start MockGeoFix
